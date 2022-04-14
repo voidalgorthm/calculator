@@ -1,3 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
 body {
     background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+main {
+    background-color: white;
+    outline: 5px double white;
+    box-shadow: 1px white;
+    width: 610px;
+    height: 610px;
+}
+
+#display {
+    background-color: navy;
+    padding: 5px;
+    width: auto;
+    height: 20%;
+}
+
+#flex {
+    height: 80%;
+}
+
+#control {
+    background-color: green;
+    height: 20%;
+}
+
+#input {
+    height: 80%;
+    display: flex;
+    flex-direction: row;
+}
+
+#digits {
+    background-color: purple;
+    width: 75%;
+}
+
+#operators {
+    background-color: brown;
+    width: 25%;
 }

@@ -1,23 +1,36 @@
-function add(num1, num2) {
+function addition(num1, num2) {
   numberOne = Number(num1);
   numberTwo = Number(num2);
   return numberOne + numberTwo;
 }
 
-function subtract(num1, num2) {
+function subtraction(num1, num2) {
   numberOne = Number(num1);
   numberTwo = Number(num2);
   return numberOne - numberTwo;
 }
 
-function multiply(num1, num2) {
+function multiplication(num1, num2) {
   numberOne = Number(num1);
   numberTwo = Number(num2);
   return numberOne * numberTwo;
 }
 
-function divide(num1, num2) {
+function division(num1, num2) {
   numberOne = Number(num1);
   numberTwo = Number(num2);
   return numberOne / numberTwo;
+}
+
+function operate(operator, num1, num2) {
+  let operation = String(operator);
+  switch (operation) {
+    case 'add':
+      let sum = addition(num1, num2);
+      console.log(sum);
+      break;
+  
+    default:
+      break;
+  }
 }
