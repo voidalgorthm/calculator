@@ -14,10 +14,16 @@ body {
 }
 
 main {
-    background-color: rgba(255, 91, 99, 0.3);
+    background-color: rgba(161, 53, 11, 0.2);
     outline: 5px double white;
     width: 400px;
     height: 500px;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #display {
@@ -37,12 +43,14 @@ main {
 
 #input {
     background-color: green;
-    height: 40%;
+    height: 60%;
+    text-align: start;
 }
 
 #output {
     background-color: blue;
-    height: 60%;
+    height: 40%;
+    text-align: end;
 }
 
 #keypads {
@@ -52,12 +60,6 @@ main {
     gap: 0.5rem 1rem;
     padding: 1rem;
     place-items: center;
-}
-
-.flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 button {
