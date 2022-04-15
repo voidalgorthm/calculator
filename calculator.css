@@ -44,7 +44,7 @@ main {
 #input {
     background-color: green;
     height: 60%;
-    text-align: start;
+    text-align: end;
 }
 
 #output {
@@ -67,4 +67,5 @@ button {
     border-radius: 50%;
     width: 4rem;
     height: 4rem;
+    font-weight: bolder;
 }

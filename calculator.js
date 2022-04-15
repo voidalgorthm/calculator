@@ -1,6 +1,6 @@
-const container = document.querySelector('#container');
-const display = container.querySelector('#display');
-const keypads = container.querySelector('#keypads');
+const calc = document.querySelector('#calc');
+const display = calc.querySelector('#display');
+const keypads = calc.querySelector('#keypads');
 
 const screen = display.querySelector('#screen');
 const input = screen.querySelector('#input');
@@ -11,50 +11,89 @@ const digits = keypads.querySelectorAll('.btn-digits');
 const operators = keypads.querySelectorAll('.btn-operators');
 const alters = keypads.querySelectorAll('.btn-alters');
 
-let numberOne;
-let numberTwo;
-let operator;
+const equals = keypads.querySelector('#equals');
+
+let firstNumber = '';
+let secondNumber = '';
+let operator = null;
+let resetScreen = false;
+let stat;
 
 digits.forEach(key => {
-  key.addEventListener('click', (e) => {
-    input.textContent += e.target.value;
-  })
+  key.addEventListener('click', pressedDigits);
 });
 
-
-function addition(num1, num2) {
-  numberOne = Number(num1);
-  numberTwo = Number(num2);
-  return numberOne + numberTwo;
+function pressedDigits(event) {
+  if (resetScreen || input.textContent === '0') clearScreen();
+  input.textContent += event.target.value;
 }
 
-function subtraction(num1, num2) {
-  numberOne = Number(num1);
-  numberTwo = Number(num2);
-  return numberOne - numberTwo;
+function clearScreen() {
+  input.textContent = '';
+  resetScreen = false;
 }
 
-function multiplication(num1, num2) {
-  numberOne = Number(num1);
-  numberTwo = Number(num2);
-  return numberOne * numberTwo;
+operators.forEach(key => {
+  key.addEventListener('click', selectOperation);
+});
+
+function selectOperation(event) {
+  if (operator !== null) evaluateNumbers();
+  operator = event.target.value;
+  firstNumber = input.textContent;
+  stat = `${firstNumber} ${operator} `;
+  output.textContent = stat;
+  resetScreen = true;
 }
 
-function division(num1, num2) {
-  numberOne = Number(num1);
-  numberTwo = Number(num2);
-  return numberOne / numberTwo;
+function evaluateNumbers() {
+  if (operator === null || resetScreen) return;
+  secondNumber = input.textContent;
+  output.textContent = stat;
+  const tempAnswer = operate(operator, firstNumber, secondNumber);
+  stat = `${firstNumber} ${operator} ${secondNumber} = `;
+  input.textContent = tempAnswer;
+  output.textContent = stat;
+  operator = null;
 }
+
+equals.addEventListener('click', evaluateNumbers);
 
 function operate(operator, num1, num2) {
-  let operation = String(operator);
-  switch (operation) {
-    case 'add':
-      let sum = addition(num1, num2);
-      console.log(sum);
-      break;
+  const numberOne = Number(num1);
+  const numberTwo = Number(num2);
+
+  switch (operator) {
+    case '+':
+      let sum = addition(numberOne, numberTwo);
+      return sum;
+    case '-':
+      let diff = subtraction(numberOne, numberTwo);
+      return diff;
+    case '*':
+      let prod = multiplication(numberOne, numberTwo);
+      return prod;
+    case '/':
+      let quot = division(numberOne, numberTwo);
+      return quot;
 
     default:
       break;
   }
+}
+
+function addition(num1, num2) {
+  return num1 + num2;
+}
+
+function subtraction(num1, num2) {
+  return num1 - num2;
+}
+
+function multiplication(num1, num2) {
+  return num1 * num2;
+}
+
+function division(num1, num2) {
+  return num1 / num2;
 }
