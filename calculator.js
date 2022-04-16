@@ -14,6 +14,7 @@ const alters = keypads.querySelectorAll('.btn-alters');
 const clear = keypads.querySelector('#clrall');
 const clearEntry = keypads.querySelector('#clrentry');
 const backspace = keypads.querySelector('#back');
+
 const equals = keypads.querySelector('#equals');
 
 let firstNumber = '';
@@ -42,6 +43,12 @@ clearEntry.addEventListener('click', () => {
   }
 });
 
+backspace.addEventListener('click', () => {
+  lastIndex = input.textContent.length - 1;
+  if (lastIndex === -1) return
+  input.textContent = input.textContent.slice(0, lastIndex);
+})
+
 digits.forEach(key => {
   key.addEventListener('click', pressedDigits);
 });
@@ -69,6 +76,8 @@ function selectOperation(event) {
   resetScreen = true;
 }
 
+equals.addEventListener('click', evaluateNumbers);
+
 function evaluateNumbers() {
   if (operator === null || resetScreen) return;
   secondNumber = input.textContent;
@@ -79,8 +88,6 @@ function evaluateNumbers() {
   output.textContent = stat;
   operator = null;
 }
-
-equals.addEventListener('click', evaluateNumbers);
 
 function operate(operator, num1, num2) {
   const numberOne = Number(num1);
