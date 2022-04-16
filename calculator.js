@@ -11,6 +11,9 @@ const digits = keypads.querySelectorAll('.btn-digits');
 const operators = keypads.querySelectorAll('.btn-operators');
 const alters = keypads.querySelectorAll('.btn-alters');
 
+const clear = keypads.querySelector('#clrall');
+const clearEntry = keypads.querySelector('#clrentry');
+const backspace = keypads.querySelector('#back');
 const equals = keypads.querySelector('#equals');
 
 let firstNumber = '';
@@ -18,6 +21,26 @@ let secondNumber = '';
 let operator = null;
 let resetScreen = false;
 let stat;
+
+clear.addEventListener('click', clearAll);
+
+function clearAll() {
+  firstNumber = '';
+  secondNumber = '';
+  operator = null;
+  resetScreen = false;
+  stat = '';
+  input.textContent = '';
+  output.textContent = '';
+}
+
+clearEntry.addEventListener('click', () => {
+  if (firstNumber && secondNumber && operator === null) {
+    clearAll();
+  } else if ((!firstNumber || firstNumber.length === '0') || (firstNumber && operator === null) || (firstNumber && operator !== null)) {
+    input.textContent = '';
+  }
+});
 
 digits.forEach(key => {
   key.addEventListener('click', pressedDigits);
