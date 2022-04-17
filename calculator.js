@@ -24,14 +24,17 @@ let secondNumber = '';
 let operator = null;
 let resetScreen = false;
 let stat;
+let eventType;
 
-sign.addEventListener('click', () => {
+sign.addEventListener('click', changeSign);
+
+function changeSign(event) {
   if (Math.sign(input.textContent) === 1) {
     input.textContent = -Math.abs(input.textContent);
   } else if (Math.sign(input.textContent) === -1) {
     input.textContent = Math.abs(input.textContent);
   }
-})
+}
 
 clear.addEventListener('click', clearAll);
 
@@ -41,23 +44,28 @@ function clearAll() {
   operator = null;
   resetScreen = false;
   stat = '';
-  input.textContent = '';
+  input.textContent = '0';
   output.textContent = '';
 }
 
-clearEntry.addEventListener('click', () => {
+clearEntry.addEventListener('click', clearEntries);
+
+function clearEntries(event) {
   if (firstNumber && secondNumber && operator === null) {
     clearAll();
   } else if ((!firstNumber || firstNumber.length === '0') || (firstNumber && operator === null) || (firstNumber && operator !== null)) {
-    input.textContent = '';
+    input.textContent = '0';
   }
-});
+}
 
-backspace.addEventListener('click', () => {
+backspace.addEventListener('click', backByOne);
+
+function backByOne(event) {
   lastIndex = input.textContent.length - 1;
   if (lastIndex === -1) return;
   input.textContent = input.textContent.slice(0, lastIndex);
-})
+}
+
 
 digits.forEach(key => {
   key.addEventListener('click', pressedDigits);
@@ -65,7 +73,20 @@ digits.forEach(key => {
 
 function pressedDigits(event) {
   if (resetScreen || input.textContent === '') clearScreen();
-  input.textContent += event.target.value;
+
+  if (input.textContent === '0') {
+    if (getEventType(event) === 'click') {
+      input.textContent = event.target.value;
+    } else if (getEventType(event) === 'keydown') {
+      input.textContent = event.key;
+    }
+  } else if (input.textContent !== '0' || input.textContent.length > 0) {
+    if (getEventType(event) === 'click') {
+      input.textContent += event.target.value;
+    } else if (getEventType(event) === 'keydown') {
+      input.textContent += event.key;
+    }
+  }
 }
 
 function clearScreen() {
@@ -79,19 +100,22 @@ operators.forEach(key => {
 
 function selectOperation(event) {
   if (operator === null && input.textContent === '') return;
-  else if (operator !== null && firstNumber) evaluateNumbers();
-  else {
+  if (operator !== null && firstNumber) evaluateNumbers();
+  
+  if (getEventType(event) === 'click') {
     operator = event.target.value;
-    firstNumber = input.textContent;
-    stat = `${firstNumber} ${operator} `;
-    output.textContent = stat;
-    resetScreen = true;
+  } else if (getEventType(event) === 'keydown') {
+    operator = event.key;
   }
+  firstNumber = input.textContent;
+  stat = `${firstNumber} ${operator} `;
+  output.textContent = stat;
+  resetScreen = true;
 }
 
 decimal.addEventListener('click', putDecimal);
 
-function putDecimal() {
+function putDecimal(event) {
   if (firstNumber && operator !== null && input.textContent === firstNumber) {
     input.textContent = ''; resetScreen = false;
   }
@@ -163,4 +187,27 @@ function multiplication(num1, num2) {
 
 function division(num1, num2) {
   return num1 / num2;
+}
+
+window.addEventListener('keydown', keyboardFunction);
+
+window.addEventListener('keydown', function (e) {
+  if (e.key === '/' || e.key === 'Enter') {
+    e.preventDefault();
+  }
+});
+
+function getEventType(event) {
+  return event.type;
+}
+
+function keyboardFunction(event) {
+  if (event.key >= 0 && event.key <= 9) pressedDigits(event);
+  if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') selectOperation(event)
+  if (event.key === '.') putDecimal();
+  if (event.key === '=' || event.key === 'Enter') evaluateNumbers();
+  if (event.key === 'Backspace') backByOne();
+  if (event.key === 'Escape') clearEntries();
+  if (event.key === 'Delete') clearAll();
+  if (event.key === ',') changeSign();
 }
