@@ -15,6 +15,7 @@ const clear = keypads.querySelector('#clrall');
 const clearEntry = keypads.querySelector('#clrentry');
 const backspace = keypads.querySelector('#back');
 
+const sign = keypads.querySelector('#sign');
 const decimal = keypads.querySelector('#decimal');
 const equals = keypads.querySelector('#equals');
 
@@ -23,6 +24,14 @@ let secondNumber = '';
 let operator = null;
 let resetScreen = false;
 let stat;
+
+sign.addEventListener('click', () => {
+  if (Math.sign(input.textContent) === 1) {
+    input.textContent = -Math.abs(input.textContent);
+  } else if (Math.sign(input.textContent) === -1) {
+    input.textContent = Math.abs(input.textContent);
+  }
+})
 
 clear.addEventListener('click', clearAll);
 
@@ -64,17 +73,6 @@ function clearScreen() {
   resetScreen = false;
 }
 
-decimal.addEventListener('click', putDecimal);
-
-function putDecimal() {
-  if (firstNumber && operator !== null && input.textContent === firstNumber) {
-    input.textContent = ''; resetScreen = false;
-  }
-  if (input.textContent === '') input.textContent = '0';
-  if (input.textContent.includes('.')) return;
-  input.textContent += ".";
-}
-
 operators.forEach(key => {
   key.addEventListener('click', selectOperation);
 });
@@ -89,6 +87,17 @@ function selectOperation(event) {
     output.textContent = stat;
     resetScreen = true;
   }
+}
+
+decimal.addEventListener('click', putDecimal);
+
+function putDecimal() {
+  if (firstNumber && operator !== null && input.textContent === firstNumber) {
+    input.textContent = ''; resetScreen = false;
+  }
+  if (input.textContent === '') input.textContent = '0';
+  if (input.textContent.includes('.')) return;
+  input.textContent += ".";
 }
 
 equals.addEventListener('click', evaluateNumbers);
@@ -109,7 +118,8 @@ function evaluateNumbers() {
 }
 
 function conversion(number) {
-  return (Math.round(number * 100) / 100).toFixed(2);
+  let num = number % 1 === 0 ? (number) : (Math.round(number * 100) / 100).toFixed(3);
+  return num;
 }
 
 function operate(operator, num1, num2) {
