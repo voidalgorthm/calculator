@@ -67,7 +67,9 @@ function clearScreen() {
 decimal.addEventListener('click', putDecimal);
 
 function putDecimal() {
-  if (firstNumber && operator !== null) input.textContent = ''; resetScreen = false;
+  if (firstNumber && operator !== null && input.textContent === firstNumber) {
+    input.textContent = ''; resetScreen = false;
+  }
   if (input.textContent === '') input.textContent = '0';
   if (input.textContent.includes('.')) return;
   input.textContent += ".";
@@ -95,7 +97,7 @@ function evaluateNumbers() {
   if (operator === null || resetScreen) return;
   secondNumber = input.textContent;
   output.textContent = stat;
-  const tempAnswer = operate(operator, firstNumber, secondNumber);
+  const tempAnswer = conversion(operate(operator, firstNumber, secondNumber));
   stat = `${firstNumber} ${operator} ${secondNumber} = `;
   if (tempAnswer === null) {
     clearAll();
@@ -104,6 +106,10 @@ function evaluateNumbers() {
     output.textContent = stat;
     operator = null;
   }
+}
+
+function conversion(number) {
+  return (Math.round(number * 100) / 100).toFixed(2);
 }
 
 function operate(operator, num1, num2) {
