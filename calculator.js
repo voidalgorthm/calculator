@@ -15,6 +15,7 @@ const clear = keypads.querySelector('#clrall');
 const clearEntry = keypads.querySelector('#clrentry');
 const backspace = keypads.querySelector('#back');
 
+const decimal = keypads.querySelector('#decimal');
 const equals = keypads.querySelector('#equals');
 
 let firstNumber = '';
@@ -45,7 +46,7 @@ clearEntry.addEventListener('click', () => {
 
 backspace.addEventListener('click', () => {
   lastIndex = input.textContent.length - 1;
-  if (lastIndex === -1) return
+  if (lastIndex === -1) return;
   input.textContent = input.textContent.slice(0, lastIndex);
 })
 
@@ -54,7 +55,7 @@ digits.forEach(key => {
 });
 
 function pressedDigits(event) {
-  if (resetScreen || input.textContent === '0') clearScreen();
+  if (resetScreen || input.textContent === '') clearScreen();
   input.textContent += event.target.value;
 }
 
@@ -63,17 +64,29 @@ function clearScreen() {
   resetScreen = false;
 }
 
+decimal.addEventListener('click', putDecimal);
+
+function putDecimal() {
+  if (firstNumber && operator !== null) input.textContent = ''; resetScreen = false;
+  if (input.textContent === '') input.textContent = '0';
+  if (input.textContent.includes('.')) return;
+  input.textContent += ".";
+}
+
 operators.forEach(key => {
   key.addEventListener('click', selectOperation);
 });
 
 function selectOperation(event) {
-  if (operator !== null) evaluateNumbers();
-  operator = event.target.value;
-  firstNumber = input.textContent;
-  stat = `${firstNumber} ${operator} `;
-  output.textContent = stat;
-  resetScreen = true;
+  if (operator === null && input.textContent === '') return;
+  else if (operator !== null && firstNumber) evaluateNumbers();
+  else {
+    operator = event.target.value;
+    firstNumber = input.textContent;
+    stat = `${firstNumber} ${operator} `;
+    output.textContent = stat;
+    resetScreen = true;
+  }
 }
 
 equals.addEventListener('click', evaluateNumbers);
@@ -84,9 +97,13 @@ function evaluateNumbers() {
   output.textContent = stat;
   const tempAnswer = operate(operator, firstNumber, secondNumber);
   stat = `${firstNumber} ${operator} ${secondNumber} = `;
-  input.textContent = tempAnswer;
-  output.textContent = stat;
-  operator = null;
+  if (tempAnswer === null) {
+    clearAll();
+  } else {
+    input.textContent = tempAnswer;
+    output.textContent = stat;
+    operator = null;
+  }
 }
 
 function operate(operator, num1, num2) {
@@ -104,6 +121,10 @@ function operate(operator, num1, num2) {
       let prod = multiplication(numberOne, numberTwo);
       return prod;
     case '/':
+      if (numberTwo === 0) {
+        alert('ERROR! answer is infinity');
+        return null;
+      }
       let quot = division(numberOne, numberTwo);
       return quot;
 
