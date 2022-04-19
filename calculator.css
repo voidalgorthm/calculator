@@ -10,7 +10,7 @@
 
 body {
     background-color: black;
-    height: 750px;
+    height: 650px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,13 +26,13 @@ body {
 
 header,
 footer {
-    height: 10%;
+    height: 5%;
     width: 100%;
     flex-shrink: 0;
 }
 
 #container {
-    height: 80%;
+    height: 90%;
     width: 100%;
     flex-shrink: 0;
 }
@@ -96,4 +96,45 @@ button {
     font-weight: bolder;
     font-size: 1.25rem;
     font-family: 'JetBrains Mono', monospace;
+    transition-duration: 0.2s;
+}
+
+button:active, button.active {
+    transform: scale(0.90);
+}
+
+button.btn-digits {
+    border-color: navy;
+}
+
+button.btn-digits:active, 
+button.btn-digits.active {
+    background-color: navy;
+}
+
+button.btn-operators {
+    border-color: rgba(11,127,171,1);
+}
+
+button.btn-operators:active,
+button.btn-operators.active {
+    background-color: rgba(11,127,171,1);
+}
+
+button.btn-alters {
+    border-color: rgba(132, 140, 207, 1);
+}
+
+button.btn-alters:active, 
+button.btn-alters.active {
+    background-color: rgba(132, 140, 207, 1);
+}
+
+button.btn-controls {
+    border-color: rgba(0, 181, 204, 1);
+}
+
+button.btn-controls:active,
+button.btn-controls.active {
+    background-color: rgba(0, 181, 204, 1);
 }

@@ -1,11 +1,13 @@
 const calc = document.querySelector('#calc');
 const display = calc.querySelector('#display');
 const keypads = calc.querySelector('#keypads');
+const footer = document.querySelector('footer');
 
 const screen = display.querySelector('#screen');
 const input = screen.querySelector('#input');
 const output = screen.querySelector('#output');
 
+const buttons = keypads.querySelectorAll('button');
 const controls = keypads.querySelectorAll('.btn-controls');
 const digits = keypads.querySelectorAll('.btn-digits');
 const operators = keypads.querySelectorAll('.btn-operators');
@@ -101,7 +103,7 @@ operators.forEach(key => {
 function selectOperation(event) {
   if (operator === null && input.textContent === '') return;
   if (operator !== null && firstNumber) evaluateNumbers();
-  
+
   if (getEventType(event) === 'click') {
     operator = event.target.value;
   } else if (getEventType(event) === 'keydown') {
@@ -191,10 +193,16 @@ function division(num1, num2) {
 
 window.addEventListener('keydown', keyboardFunction);
 
-window.addEventListener('keydown', function (e) {
-  if (e.key === '/' || e.key === 'Enter') {
-    e.preventDefault();
+window.addEventListener('keydown', function (event) {
+  if (event.key === '/' || event.key === 'Enter') {
+    event.preventDefault();
   }
+});
+
+window.addEventListener('keyup', function (event) {
+  buttons.forEach(button => {
+    if (button.classList.contains('active')) button.classList.remove('active');
+  })
 });
 
 function getEventType(event) {
@@ -202,6 +210,10 @@ function getEventType(event) {
 }
 
 function keyboardFunction(event) {
+  buttons.forEach(button => {
+    if (event.key === button.getAttribute('value')) button.classList.add('active');
+  });
+
   if (event.key >= 0 && event.key <= 9) pressedDigits(event);
   if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') selectOperation(event)
   if (event.key === '.') putDecimal();
@@ -211,3 +223,5 @@ function keyboardFunction(event) {
   if (event.key === 'Delete') clearAll();
   if (event.key === ',') changeSign();
 }
+
+footer.textContent = `\u00A9 codexeger, ${(new Date().getFullYear())}`;
